@@ -6,15 +6,15 @@ var examples = [
   {
     videoId: '5R0_FJ4r73s',
     startTime: 26,
-    endTime: 750
+    endTime: 30
   }, {
     videoId: '8eSrdgTHhK0',
     startTime: 25,
-    endTime: 750
+    endTime: 30
   }, {
     videoId: '4lPW1lTO4OI',
     startTime: 24,
-    endTime: 750
+    endTime: 30
   }
 ];
 
@@ -30,39 +30,49 @@ function onYouTubeIframeAPIReady() {
     // generate video div
     $players.append($("<div>", {id: formVideoId(item.videoId), 'data-start': item.startTime, 'data-end': item.endTime}));
 
-    players.push(new YT.Player(formVideoId(item.videoId), {
+    players.push({meta: item, video: new YT.Player(formVideoId(item.videoId), {
       height: '390',
       width: '640',
       playerVars: {
         enablejsapi: 1,
       },
       videoId: item.videoId,
-      events: base_events
-    }));
+      events: base_events,
+    })});
   });
 };
 
 function onPlayerReady(e) {
   // store off the videoid
   var videoId = e.target.o.videoData.video_id;
-  
-  // find the meta
-  var videoMeta;
-  for (var i = 0; i < examples.length; i++) {
-    if (examples[i].videoId == videoId) {
-      videoMeta = examples[i];
-      videoMeta.i = i;
+
+  var index;
+  for (var i = 0; i < players.length; i++) {
+    var playerHash = players[i];
+    if (playerHash.video == e.target) {
+      playerHash.video.cueVideoById(videoId, playerHash.meta.startTime);
+      index = i;
       break;
     }
   }
 
-  // cue it at the start time
-  e.target.cueVideoById(videoId, videoMeta.startTime);
-
-  var last = i + 1 == examples.length;
+  var last = index + 1 == players.length;
   if (last) beginAll();
 }
 
 function beginAll() {
-  
+  var currentTime = 0;
+  players.forEach(function(playerHash) {
+    var duration = playerHash.meta.endTime - playerHash.meta.startTime;
+
+    setTimeout(function(hash) {
+      hash.video.playVideo();
+    }, currentTime * 1000, playerHash);
+
+    currentTime += duration;
+
+    setTimeout(function(hash) {
+      hash.video.stopVideo();
+    }, currentTime * 1000, playerHash);
+  });
 }
