@@ -51,6 +51,8 @@ function onPlayerReady(e) {
     var playerHash = players[i];
     if (playerHash.video == e.target) {
       playerHash.video.cueVideoById(videoId, playerHash.meta.startTime);
+      playerHash.video.playVideo();
+      playerHash.video.stopVideo();
       index = i;
       break;
     }
