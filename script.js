@@ -79,11 +79,23 @@ var cueFunc = function(e) {
 
     loaded[meta.meta.i] = true;
 
-    if (loaded.length == examples.length - 1) {
+    if (allLoaded()) {
       beginAll();
     }
   }
 };
+
+function allLoaded() {
+  if (loaded.length == examples.length) {
+    for (var i = 0; i < loaded.length; i++) {
+      if (!loaded[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
 
 function beginAll() {
   var currentTime = 0;
