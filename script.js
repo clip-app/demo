@@ -82,7 +82,7 @@ var cueFunc = function(e) {
     loaded[meta.meta.i] = true;
 
     if (allLoaded()) {
-      beginAll();
+      beginOne(players, 0);
     }
   }
 };
@@ -99,24 +99,30 @@ function allLoaded() {
   return false;
 }
 
-var currentTime = 0;
+function beginOne(players, index) {
+  if (index > players.length - 1) return;
 
-function beginAll() {
-  players.forEach(function(playerHash) {
-    var duration = playerHash.meta.endTime - playerHash.meta.startTime;
+  var current_meta   = players[index].meta // Metadata for the current video
+    , current_video  = players[index].video // YouTube API object
+    , current_player = $('#' + formVideoId(current_meta.videoId)) // The DOM-node that is playing the video
+    , duration       = current_meta.endTime - current_meta.startTime; // The duration of the video that we're playing
 
-    setTimeout(function(hash) {
-      $('#' + formVideoId(hash.meta.videoId)).show(0, function() {
-        hash.video.playVideo();
-      });
-    }, currentTime * 1000, playerHash);
+  current_video.addEventListener('onStateChange', function (e) {
+    if (e.data == 1) {
+      // current_video.unmute();
+      current_video.unMute();
+      current_player.show();
 
-    currentTime += duration;
+      setTimeout(function() {
+        // Start the next video
+        beginOne(players, index + 1);
 
-    setTimeout(function(hash) {
-      $('#' + formVideoId(hash.meta.videoId)).hide(0, function() {
-        hash.video.stopVideo();
-      });
-    }, currentTime * 1000, playerHash);
+        // And kill the "current" video
+        current_video.stopVideo();
+        current_player.hide();
+      }, duration * 1000);
+    }
   });
+
+  current_video.playVideo();
 }
