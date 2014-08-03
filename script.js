@@ -31,15 +31,18 @@ function onYouTubeIframeAPIReady() {
     item.i = ++index;
     $players.append($("<div>", {id: formVideoId(item.videoId), 'data-start': item.startTime, 'data-end': item.endTime}));
 
-    players.push({meta: item, video: new YT.Player(formVideoId(item.videoId), {
-      height: '390',
-      width: '640',
-      playerVars: {
-        enablejsapi: 1,
-      },
-      videoId: item.videoId,
-      events: base_events,
-    })});
+    players.push({
+      meta: item,
+      video: new YT.Player(formVideoId(item.videoId), {
+        height: '390',
+        width: '640',
+        playerVars: {
+          enablejsapi: 1,
+        },
+        videoId: item.videoId,
+        events: base_events,
+      })
+    });
   });
 };
 
