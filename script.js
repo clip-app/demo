@@ -43,6 +43,8 @@ function onYouTubeIframeAPIReady() {
         events: base_events,
       })
     });
+
+    $('#' + formVideoId(item.videoId)).hide();
   });
 };
 
@@ -97,19 +99,24 @@ function allLoaded() {
   return false;
 }
 
+var currentTime = 0;
+
 function beginAll() {
-  var currentTime = 0;
   players.forEach(function(playerHash) {
     var duration = playerHash.meta.endTime - playerHash.meta.startTime;
 
     setTimeout(function(hash) {
-      hash.video.playVideo();
+      $('#' + formVideoId(hash.meta.videoId)).show(0, function() {
+        hash.video.playVideo();
+      });
     }, currentTime * 1000, playerHash);
 
     currentTime += duration;
 
     setTimeout(function(hash) {
-      hash.video.stopVideo();
+      $('#' + formVideoId(hash.meta.videoId)).hide(0, function() {
+        hash.video.stopVideo();
+      });
     }, currentTime * 1000, playerHash);
   });
 }
