@@ -4,17 +4,17 @@ var done = false
 
 var examples = [
   {
-    videoId: '5R0_FJ4r73s',
-    startTime: 26,
-    endTime: 30
+    video_id: '5R0_FJ4r73s',
+    start: 26,
+    end: 30
   }, {
-    videoId: '8eSrdgTHhK0',
-    startTime: 25,
-    endTime: 30
+    video_id: '8eSrdgTHhK0',
+    start: 25,
+    end: 30
   }, {
-    videoId: '4lPW1lTO4OI',
-    startTime: 24,
-    endTime: 30
+    video_id: '4lPW1lTO4OI',
+    start: 24,
+    end: 30
   }
 ];
 
@@ -29,11 +29,11 @@ function onYouTubeIframeAPIReady() {
   examples.forEach(function(item) {
     // generate video div
     item.i = ++index;
-    $players.append($("<div>", {id: formVideoId(item.videoId), 'data-start': item.startTime, 'data-end': item.endTime}));
+    $players.append($("<div>", {id: formVideoId(item.video_id), 'data-start': item.start, 'data-end': item.end}));
 
     players.push({
       meta: item,
-      video: new YT.Player(formVideoId(item.videoId), {
+      video: new YT.Player(formVideoId(item.video_id), {
         height: '390',
         width: '640',
         playerVars: {
@@ -42,32 +42,32 @@ function onYouTubeIframeAPIReady() {
           showInfo: 0,
           modestBranding: 1
         },
-        videoId: item.videoId,
+        videoId: item.video_id,
         events: base_events,
       })
     });
 
-    $('#' + formVideoId(item.videoId)).hide();
+    $('#' + formVideoId(item.video_id)).hide();
   });
 };
 
 function findMetaPair(videoId) {
   for (var i = 0; i < players.length; i++) {
-    if (players[i].meta.videoId == videoId) {
+    if (players[i].meta.video_id == videoId) {
       return players[i];
     }
   }
 }
 
 function onPlayerReady(e) {
-  var videoId = e.target.o.videoData.video_id;
+  var video_id = e.target.o.videoData.video_id;
 
-  var pair = findMetaPair(videoId);
+  var pair = findMetaPair(video_id);
   var video = pair.video;
 
   // start buffering that shit up
   video.mute();
-  video.seekTo(pair.meta.startTime);
+  video.seekTo(pair.meta.start);
 }
 
 var loaded = [];
@@ -80,7 +80,7 @@ var cueFunc = function(e) {
     if (loaded[meta.meta.i] == true) return;
 
     e.target.pauseVideo();
-    e.target.seekTo(meta.meta.startTime);
+    e.target.seekTo(meta.meta.start);
 
     loaded[meta.meta.i] = true;
 
@@ -109,8 +109,8 @@ function beginOne(players, index) {
 
   var current_meta   = players[index].meta // Metadata for the current video
     , current_video  = players[index].video // YouTube API object
-    , current_player = $('#' + formVideoId(current_meta.videoId)) // The DOM-node that is playing the video
-    , duration       = current_meta.endTime - current_meta.startTime; // The duration of the video that we're playing
+    , current_player = $('#' + formVideoId(current_meta.video_id)) // The DOM-node that is playing the video
+    , duration       = current_meta.end - current_meta.start; // The duration of the video that we're playing
 
   current_video.addEventListener('onStateChange', function (e) {
     if (e.data == 1) {
