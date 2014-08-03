@@ -1,37 +1,86 @@
 var examples = [
   {
-    "word": "Good",
+    "word": "citizens",
     "id": 0,
     "video_id": "MudnsExyV78",
-    "end": 5.958,
-    "start": 5.569
+    "end": 293.82,
+    "start": 292.52
   },
   {
-    "word": "evening,",
+    "word": "suppress",
     "id": 1,
     "video_id": "MudnsExyV78",
-    "end": 6.347,
-    "start": 5.958
+    "end": 312.138,
+    "start": 311.400
   },
   {
-    "word": "and",
+    "word": "transgender",
     "id": 2,
     "video_id": "MudnsExyV78",
-    "end": 7.047,
-    "start": 6.658
+    "end": 322.323,
+    "start": 321.607
   },
   {
-    "word": "let",
+    "word": "opportunities",
     "id": 3,
     "video_id": "MudnsExyV78",
-    "end": 7.358,
-    "start": 6.969
+    "end": 304.785,
+    "start": 304.100
   },
   {
-    "word": "me",
+    "word": "citizens",
     "id": 4,
     "video_id": "MudnsExyV78",
-    "end": 7.669,
-    "start": 7.28
-  }
+    "end": 293.82,
+    "start": 292.52
+  },
+  {
+    "word": "suppress",
+    "id": 5,
+    "video_id": "MudnsExyV78",
+    "end": 312.138,
+    "start": 311.400
+  },
+  {
+    "word": "transgender",
+    "id": 6,
+    "video_id": "MudnsExyV78",
+    "end": 322.323,
+    "start": 321.607
+  },
+  {
+    "word": "opportunities",
+    "id": 7,
+    "video_id": "MudnsExyV78",
+    "end": 304.785,
+    "start": 304.100
+  },
+    {
+    "word": "citizens",
+    "id": 8,
+    "video_id": "MudnsExyV78",
+    "end": 293.82,
+    "start": 292.52
+  },
+  {
+    "word": "suppress",
+    "id": 9,
+    "video_id": "MudnsExyV78",
+    "end": 312.138,
+    "start": 311.400
+  },
+  {
+    "word": "transgender",
+    "id": 10,
+    "video_id": "MudnsExyV78",
+    "end": 322.323,
+    "start": 321.607
+  },
+  {
+    "word": "opportunities",
+    "id":11,
+    "video_id": "MudnsExyV78",
+    "end": 304.785,
+    "start": 304.100
+  },
 ];

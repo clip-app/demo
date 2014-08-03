@@ -11,7 +11,7 @@ function onYouTubeIframeAPIReady() {
 
   examples.forEach(function(item) {
     // generate video div
-    $players.append($("<div>", {id: formVideoId(item.video_id, item.id), 'data-index': item.id}));
+    $players.append($("<div style='position: absolute, top: 0, left: 0, z-index:" + -id + "'>", {id: formVideoId(item.video_id, item.id), 'data-index': item.id}));
 
     players.push({
       meta: item,
@@ -84,7 +84,7 @@ function allLoaded() {
   return false;
 }
 
-var added_delay = 0;
+var delayBetweenWords = 50;
 
 function beginOne(players, index) {
   if (index > players.length - 1) return;
@@ -100,13 +100,16 @@ function beginOne(players, index) {
       current_player.show();
 
       setTimeout(function() {
-        // Start the next video
-        beginOne(players, index + 1);
-
         // And kill the "current" video
-        current_video.stopVideo();
-        current_player.hide();
-      }, (duration * 1000) + added_delay);
+        current_video.mute();
+        // current_player.show();
+        setTimeout(function() {
+
+          current_video.stopVideo();
+          // Start the next video
+          beginOne(players, index + 1);
+        }, delayBetweenWords);
+      }, (duration * 1000));
     }
   });
 
