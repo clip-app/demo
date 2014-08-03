@@ -102,6 +102,8 @@ function allLoaded() {
   return false;
 }
 
+var added_delay = 0;
+
 function beginOne(players, index) {
   if (index > players.length - 1) return;
 
@@ -122,7 +124,7 @@ function beginOne(players, index) {
         // And kill the "current" video
         current_video.stopVideo();
         current_player.hide();
-      }, duration * 1000);
+      }, (duration * 1000) + added_delay);
     }
   });
 
