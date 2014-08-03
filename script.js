@@ -62,12 +62,23 @@ function onPlayerReady(e) {
   video.seekTo(pair.meta.startTime);
 }
 
-var cueFunc = function(e) {
-  var id = e.target.getVideoData().video_id;
+var loaded = [];
 
+var cueFunc = function(e) {
   if (e.data == 1) {
+    var id = e.target.o.videoData.video_id
+      , meta = findMetaPair(id);
+
+    if (loaded[meta.meta.i] == true) return;
+
     e.target.pauseVideo();
-    e.target.seekTo(findMetaPair(id).meta.startTime);
+    e.target.seekTo(meta.meta.startTime);
+
+    loaded[meta.meta.i] = true;
+
+    if (loaded.length == examples.length - 1) {
+      beginAll();
+    }
   }
 };
 
