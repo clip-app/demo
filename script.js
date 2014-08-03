@@ -38,6 +38,9 @@ function onYouTubeIframeAPIReady() {
         width: '640',
         playerVars: {
           enablejsapi: 1,
+          controls: 0,
+          showInfo: 0,
+          modestBranding: 1
         },
         videoId: item.videoId,
         events: base_events,
