@@ -2,38 +2,20 @@ var done = false
   , players = []
   , current_id;
 
-var examples = [
-  {
-    video_id: '5R0_FJ4r73s',
-    start: 26,
-    end: 30
-  }, {
-    video_id: '8eSrdgTHhK0',
-    start: 25,
-    end: 30
-  }, {
-    video_id: '4lPW1lTO4OI',
-    start: 24,
-    end: 30
-  }
-];
-
-function formVideoId(videoId) { return 'player-' + videoId; };
+function formVideoId(videoId, index) { return 'player-' + videoId + '-' + index; };
 
 // start-point
 function onYouTubeIframeAPIReady() {
   var $players = $('#players');
-  var index = -1;
   var base_events = {'onStateChange': cueFunc, 'onReady': onPlayerReady};
 
   examples.forEach(function(item) {
     // generate video div
-    item.i = ++index;
-    $players.append($("<div>", {id: formVideoId(item.video_id), 'data-start': item.start, 'data-end': item.end}));
+    $players.append($("<div>", {id: formVideoId(item.video_id, item.id), 'data-index': item.id}));
 
     players.push({
       meta: item,
-      video: new YT.Player(formVideoId(item.video_id), {
+      video: new YT.Player(formVideoId(item.video_id, item.id), {
         height: '390',
         width: '640',
         playerVars: {
@@ -47,7 +29,7 @@ function onYouTubeIframeAPIReady() {
       })
     });
 
-    $('#' + formVideoId(item.video_id)).hide();
+    $('#' + formVideoId(item.video_id, item.id)).hide();
   });
 };
 
@@ -62,7 +44,7 @@ function findMetaPair(videoId) {
 function onPlayerReady(e) {
   var video_id = e.target.o.videoData.video_id;
 
-  var pair = findMetaPair(video_id);
+  var pair = players[$(e.target.a).attr('data-index')];
   var video = pair.video;
 
   // start buffering that shit up
@@ -74,15 +56,15 @@ var loaded = [];
 
 var cueFunc = function(e) {
   if (e.data == 1) {
-    var id = e.target.o.videoData.video_id
-      , meta = findMetaPair(id);
+    var id   = e.target.o.videoData.video_id
+      , meta = examples[$(e.target.a).attr('data-index')]; //findMetaPair(id); // here is the problem
 
-    if (loaded[meta.meta.i] == true) return;
+    if (loaded[meta.id] == true) return;
 
     e.target.pauseVideo();
-    e.target.seekTo(meta.meta.start);
+    e.target.seekTo(meta.start);
 
-    loaded[meta.meta.i] = true;
+    loaded[meta.id] = true;
 
     if (allLoaded()) {
       beginOne(players, 0);
@@ -93,7 +75,7 @@ var cueFunc = function(e) {
 function allLoaded() {
   if (loaded.length == examples.length) {
     for (var i = 0; i < loaded.length; i++) {
-      if (!loaded[i]) {
+      if (! loaded[i]) {
         return false;
       }
     }
@@ -109,7 +91,7 @@ function beginOne(players, index) {
 
   var current_meta   = players[index].meta // Metadata for the current video
     , current_video  = players[index].video // YouTube API object
-    , current_player = $('#' + formVideoId(current_meta.video_id)) // The DOM-node that is playing the video
+    , current_player = $('#' + formVideoId(current_meta.video_id, index)) // The DOM-node that is playing the video
     , duration       = current_meta.end - current_meta.start; // The duration of the video that we're playing
 
   current_video.addEventListener('onStateChange', function (e) {
