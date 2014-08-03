@@ -24,7 +24,7 @@ function formVideoId(videoId) { return 'player-' + videoId; };
 function onYouTubeIframeAPIReady() {
   var $players = $('#players');
   var index = -1;
-  var base_events = {'onReady': onPlayerReady};
+  var base_events = {'onStateChange': cueFunc, 'onReady': onPlayerReady};
 
   examples.forEach(function(item) {
     // generate video div
@@ -52,27 +52,22 @@ function findMetaPair(videoId) {
 }
 
 function onPlayerReady(e) {
-  // store off the videoid
   var videoId = e.target.o.videoData.video_id;
 
   var pair = findMetaPair(videoId);
   var video = pair.video;
 
   // start buffering that shit up
-  video.addEventListener('onStateChange', cueFunc);
-  video.cueVideoById(videoId, pair.meta.startTime);
+  video.mute();
+  video.seekTo(pair.meta.startTime);
 }
 
 var cueFunc = function(e) {
-  console.log(e.data);
+  var id = e.target.getVideoData().video_id;
+
   if (e.data == 1) {
-    e.target.removeEventListener('onStateChange', cueFunc);
     e.target.pauseVideo();
- 
-    console.log(findMetaPair(e.target.o.videoData.video_id).meta.index);
-    if (findMetaPair(e.target.o.videoData.video_id).meta.index == examples.length - 1) {
-      console.log('last1');
-    }
+    e.target.seekTo(findMetaPair(id).meta.startTime);
   }
 };
 
