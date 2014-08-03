@@ -109,7 +109,6 @@ function beginOne(players, index) {
 
   current_video.addEventListener('onStateChange', function (e) {
     if (e.data == 1) {
-      // current_video.unmute();
       current_video.unMute();
       current_player.show();
 
